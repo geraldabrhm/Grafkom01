@@ -1,6 +1,6 @@
-import { vertexShaderGLSL, fragmentShaderGLSL } from "./modules/shader.js";
-import { createShader, createProgram } from "./modules/generator.js";
-import { getRelativePosition, rotatePoints } from "./modules/transform-utils.js";
+import { vertexShaderGLSL, fragmentShaderGLSL } from "../../modules/shader.js";
+import { createShader, createProgram } from "../../modules/generator.js";
+import { getRelativePosition, rotatePoints } from "../../modules/transform-utils.js";
 
 // * Setting up a WebGL context
 const canvas = document.querySelector("#draw-surface");
