@@ -1,0 +1,87 @@
+/* GLOBALS */
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-Book.otf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-BookItalic.otf");
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-Medium.otf");
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-MediumItalic.otf");
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-Bold.otf");
+	font-weight: bolder;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-BoldItalic.otf");
+	font-weight: bolder;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-Light.otf");
+	font-weight: lighter;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "circular";
+	src: url("./assets/fonts/circular/CircularStd-LightItalic.otf");
+	font-weight: lighter;
+	font-style: italic;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: circular, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+    border: 1px solid black;
+    padding: 0;
+    margin: auto;
+    width: 400px;
+    height: 300px;
+}
+
+/* CLASS */
+
+.slider {
+    -webkit-appearance: none;
+    height: 10px;
+    background: #d3d3d3;
+    outline: none;
+}
