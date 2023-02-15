@@ -10,25 +10,32 @@
     <script type="module" src="app.js"></script>
 </head>
 <body>
-    <canvas id="draw-surface" width="400" height="300" ></canvas>
-    <div>
-      <ul>
-        <li>
-          <b>Lines</b>
-          <div>
-            <p>Translasi X</p>
-            <input id="translasi-x-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01">
-          </div>
-          <div>
-            <p>Translasi Y</p>
-            <input id="translasi-y-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01">
-          </div>
-          <div>
-            <p>Rotasi</p>
-            <input id="rotasi-slider" class="slider" type="range" min="0" max="360" value="0" step="0.01">
-          </div>
-        </li>
-      </ul>
-    </div>
+    <main>
+      <canvas id="draw-surface" width="800px" height="450px" ></canvas>
+      <div id="canvas-modifier">
+        <ul>
+          <li>
+            <b>Lines</b>
+            <button id="line-loader">Load New Line</button>
+            <div>
+              <p>Translasi X</p>
+              <input id="translasi-x-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01">
+            </div>
+            <div>
+              <p>Translasi Y</p>
+              <input id="translasi-y-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01">
+            </div>
+            <div>
+              <p>Rotasi</p>
+              <input id="rotasi-slider" class="slider" type="range" min="0" max="360" value="0" step="0.01">
+            </div>
+            <div>
+              <p>Color</p>
+              <input id="color-picker" class="" type="color" value="#ff0000" disabled>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </main>
 </body>
 </html>

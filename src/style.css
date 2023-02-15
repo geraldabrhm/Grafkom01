@@ -69,12 +69,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+main {
+	display: flex;
+	justify-content: space-between;
+	width: 75vw;
+	height: 75vh;
+}
+
 canvas {
-    border: 1px solid black;
+    border: 2px solid black;
     padding: 0;
-    margin: auto;
-    width: 400px;
-    height: 300px;
+    margin: 10px;
+    width: 800px;
+    height: 450px;
 }
 
 /* CLASS */
@@ -84,4 +91,11 @@ canvas {
     height: 10px;
     background: #d3d3d3;
     outline: none;
+}
+
+/* ID */
+#canvas-modifier {
+	margin: 10px;
+	padding: 10px;
+	border: 2px solid black;
 }
