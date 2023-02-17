@@ -19,15 +19,15 @@
             <button id="line-loader">Load New Line</button>
             <div>
               <p>Translasi X</p>
-              <input id="translasi-x-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01">
+              <input id="translasi-x-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01" disabled>
             </div>
             <div>
               <p>Translasi Y</p>
-              <input id="translasi-y-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01">
+              <input id="translasi-y-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01" disabled>
             </div>
             <div>
               <p>Rotasi</p>
-              <input id="rotasi-slider" class="slider" type="range" min="0" max="360" value="0" step="0.01">
+              <input id="rotasi-slider" class="slider" type="range" min="0" max="360" value="0" step="0.01" disabled>
             </div>
             <div>
               <p>Color</p>
@@ -36,6 +36,7 @@
           </li>
         </ul>
       </div>
+      <p id="picked-info" hidden>Selected: </p>
     </main>
 </body>
 </html>

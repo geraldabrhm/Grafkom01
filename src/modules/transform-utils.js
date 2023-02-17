@@ -18,3 +18,12 @@ export const rotatePoints = (x0, y0, xc, yc, deg) => {
     const y1 = (x0 - xc)*Math.sin(degInRadiant) + (y0 - yc)*Math.cos(degInRadiant) + yc
     return [x1, y1]
 }
+
+export const hexToRGB = hex => {
+    let rgbForm = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return rgbForm ? {
+      r: parseInt(rgbForm[1], 16),
+      g: parseInt(rgbForm[2], 16),
+      b: parseInt(rgbForm[3], 16)
+    } : null;
+}
