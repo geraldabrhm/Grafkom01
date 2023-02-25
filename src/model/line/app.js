@@ -49,50 +49,57 @@ gl.useProgram(program); // Execute shader program
 let selectedIndex = null;
 const rect = canvas.getBoundingClientRect();
 
+
 canvas.addEventListener("mousedown", e => {    
-    // Get the mouse position relative to top left of web view
-    const pickedInfo = document.querySelector("#picked-info");
-    selectedIndex = picker(e);
-    pickedObject = picker(e);
-    if(pickedObject != null) {
-        sliderTranslasiX.value = positions[pickedObject];
-        sliderTranslasiY.value = positions[pickedObject + 1];
-
-        sliderTranslasiX.removeAttribute('disabled');
-        sliderTranslasiY.removeAttribute('disabled');
-        sliderRotasi.removeAttribute('disabled');
-        colorPicker.removeAttribute('disabled');
-
-        pickedInfo.removeAttribute('hidden');
-        pickedInfo.innerHTML = `Selected: vertex with index ${pickedObject}` 
-    } else {
-        pickedInfo.setAttribute("hidden", true);
-        sliderTranslasiX.setAttribute('disabled', true);
-        sliderTranslasiY.setAttribute('disabled', true);
-        sliderRotasi.setAttribute('disabled', true);
-        colorPicker.setAttribute('disabled', true);
-    }
+    if(localStorage.getItem("state") == "line") {
+        // Get the mouse position relative to top left of web view
+        const pickedInfo = document.querySelector("#picked-info");
+        selectedIndex = picker(e);
+        pickedObject = picker(e);
+        if(pickedObject != null) {
+            sliderTranslasiX.value = positions[pickedObject];
+            sliderTranslasiY.value = positions[pickedObject + 1];
+    
+            sliderTranslasiX.removeAttribute('disabled');
+            sliderTranslasiY.removeAttribute('disabled');
+            sliderRotasi.removeAttribute('disabled');
+            colorPicker.removeAttribute('disabled');
+    
+            pickedInfo.removeAttribute('hidden');
+            pickedInfo.innerHTML = `<b>Selected:</b> vertex with index ${pickedObject}` 
+        } else {
+            pickedInfo.setAttribute("hidden", true);
+            sliderTranslasiX.setAttribute('disabled', true);
+            sliderTranslasiY.setAttribute('disabled', true);
+            sliderRotasi.setAttribute('disabled', true);
+            colorPicker.setAttribute('disabled', true);
+        }
+    } 
 });
 
 canvas.addEventListener("mousemove", e => {
-    if (selectedIndex !== null) {       
-        // Get the mouse position relative to top left of web view
-        let x = e.clientX;
-        let y = e.clientY;
-        
-        // Get the dynamic position that then normalized
-        const valNormalize = getRelativePosition(x, y, rect);
-        positions[selectedIndex] = valNormalize[0];
-        positions[selectedIndex + 1] = valNormalize[1];
-        sliderTranslasiX.value = valNormalize[0];
-        sliderTranslasiY.value = valNormalize[1];
-        
-        drawLine(positions, positionBuffer, colors, colorBuffer);
-    }
+    if(localStorage.getItem("state") == "line") {
+        if (selectedIndex !== null) {       
+            // Get the mouse position relative to top left of web view
+            let x = e.clientX;
+            let y = e.clientY;
+            
+            // Get the dynamic position that then normalized
+            const valNormalize = getRelativePosition(x, y, rect);
+            positions[selectedIndex] = valNormalize[0];
+            positions[selectedIndex + 1] = valNormalize[1];
+            sliderTranslasiX.value = valNormalize[0];
+            sliderTranslasiY.value = valNormalize[1];
+            
+            drawLine(positions, positionBuffer, colors, colorBuffer);
+        }
+    } 
 });
 
 canvas.addEventListener("mouseup", e => {
-    selectedIndex = null;
+    if(localStorage.getItem("state") == "line") {
+        selectedIndex = null;
+    } 
 });
 
 // * Handle slider event
@@ -104,79 +111,131 @@ const colorPicker = document.querySelector("#color-picker");
 const lineLoader = document.querySelector("#line-loader");
 
 lineLoader.addEventListener("click", e => {
-    positions.push(
-        -0.25, 0,
-        0.25, 0,
-    )
-    colors.push(
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-    )
-    drawLine(positions, positionBuffer, colors, colorBuffer);
+    if(localStorage.getItem("state") == "line") {
+        positions.push(
+            -0.25, 0,
+            0.25, 0,
+        )
+        colors.push(
+            0, 0, 0, 1,
+            0, 0, 0, 1,
+        )
+        drawLine(positions, positionBuffer, colors, colorBuffer);
+    } 
 })
 
 sliderTranslasiX.addEventListener("input", e => {
-    const shiftVal = sliderTranslasiX.value - positions[pickedObject];
-    positions[pickedObject] += shiftVal;
-    if(pickedObject != null) {
-        if(pickedObject % 4 == 0) {
-            positions[pickedObject + 2] += shiftVal;
-        } else if((pickedObject - 2) % 4 == 0) {
-            positions[pickedObject - 2] += shiftVal;
+    if(localStorage.getItem("state") == "line") {
+        const shiftVal = sliderTranslasiX.value - positions[pickedObject];
+        positions[pickedObject] += shiftVal;
+        if(pickedObject != null) {
+            if(pickedObject % 4 == 0) {
+                positions[pickedObject + 2] += shiftVal;
+            } else if((pickedObject - 2) % 4 == 0) {
+                positions[pickedObject - 2] += shiftVal;
+            }
         }
-    }
-    drawLine(positions, positionBuffer, colors, colorBuffer);
+        drawLine(positions, positionBuffer, colors, colorBuffer);
+    } 
 })
 
 sliderTranslasiY.addEventListener("input", e => {
-    const shiftVal = sliderTranslasiY.value - positions[1];
-    positions[pickedObject + 1] += shiftVal;
-    if(pickedObject != null) {
-        if((pickedObject) % 4 == 0) {
-            positions[pickedObject + 3] += shiftVal;
-        } else if((pickedObject - 2) % 4 == 0) {
-            positions[pickedObject - 1] += shiftVal;
+    if(localStorage.getItem("state") == "line") {
+        const shiftVal = sliderTranslasiY.value - positions[1];
+        positions[pickedObject + 1] += shiftVal;
+        if(pickedObject != null) {
+            if((pickedObject) % 4 == 0) {
+                positions[pickedObject + 3] += shiftVal;
+            } else if((pickedObject - 2) % 4 == 0) {
+                positions[pickedObject - 1] += shiftVal;
+            }
         }
-    }
-    drawLine(positions, positionBuffer, colors, colorBuffer);
+        drawLine(positions, positionBuffer, colors, colorBuffer);
+    } 
 })
 
 sliderRotasi.addEventListener("input", e => {
-    const deg = sliderRotasi.value;
-    let rotatedPoints = null;
-    // 0 [1] 2 3 || 4 [5] 6 7 || 8 [9] 10 11 || 12 13 14 15
-    if(pickedObject != null) {
-        if(pickedObject % 4 == 0) {
-            rotatedPoints = rotatePoints(positions[pickedObject], positions[pickedObject + 1], positions[pickedObject + 2], positions[pickedObject + 3], deg);             
-        } else if((pickedObject - 2) % 4 == 0) {
-            rotatedPoints = rotatePoints(positions[pickedObject], positions[pickedObject + 1], positions[pickedObject - 2], positions[pickedObject - 1], deg);
+    if(localStorage.getItem("state") == "line") {
+        const deg = sliderRotasi.value;
+        let rotatedPoints = null;
+        // 0 [1] 2 3 || 4 [5] 6 7 || 8 [9] 10 11 || 12 13 14 15
+        if(pickedObject != null) {
+            if(pickedObject % 4 == 0) {
+                rotatedPoints = rotatePoints(positions[pickedObject], positions[pickedObject + 1], positions[pickedObject + 2], positions[pickedObject + 3], deg);             
+            } else if((pickedObject - 2) % 4 == 0) {
+                rotatedPoints = rotatePoints(positions[pickedObject], positions[pickedObject + 1], positions[pickedObject - 2], positions[pickedObject - 1], deg);
+            }
         }
-    }
-    positions[pickedObject] = rotatedPoints[0];
-    positions[pickedObject + 1] = rotatedPoints[1];
-    
-    drawLine(positions, positionBuffer, colors, colorBuffer);
+        positions[pickedObject] = rotatedPoints[0];
+        positions[pickedObject + 1] = rotatedPoints[1];
+        
+        drawLine(positions, positionBuffer, colors, colorBuffer);
+    } 
 })
 
 colorPicker.addEventListener("change", e=> {
-    // console.info(colorPicker.value);
-    const rgbVal = hexToRGB(colorPicker.value);
-    console.info(rgbVal.r);
-    if(pickedObject != null) {
-        colors[pickedObject * 2] = rgbVal.r / 255
-        colors[pickedObject * 2 + 1] = rgbVal.g / 255
-        colors[pickedObject * 2 + 2] = rgbVal.b / 255
-    }
-
-    drawLine(positions, positionBuffer, colors, colorBuffer);
+    if(localStorage.getItem("state") == "line") {
+        // console.info(colorPicker.value);
+        const rgbVal = hexToRGB(colorPicker.value);
+        console.info(rgbVal.r);
+        if(pickedObject != null) {
+            colors[pickedObject * 2] = rgbVal.r / 255
+            colors[pickedObject * 2 + 1] = rgbVal.g / 255
+            colors[pickedObject * 2 + 2] = rgbVal.b / 255
+        }
+    
+        drawLine(positions, positionBuffer, colors, colorBuffer);
+    } 
 })
+
+const saveBtn = document.querySelector("#save-btn");
+saveBtn.addEventListener("click", (e) => {
+    const data = {
+        positions,
+        colors,
+    };
+    const dataStr = JSON.stringify(data);
+    const dataUri =
+        "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = "data.json";
+
+    let linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+});
+
+// handle load from json file
+const loadBtn = document.querySelector("#load-btn");
+loadBtn.addEventListener("click", (e) => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".json";
+    fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = e.target.result;
+            const data = JSON.parse(result);
+            positions = data.positions;
+            colors = data.colors;
+            drawLine(positions, positionBuffer, colors, colorBuffer);
+        };
+        reader.readAsText(file);
+    };
+    fileInput.click();
+});
+
 
 // * Handle onload window
 
 window.addEventListener("load", e => {
-    sliderTranslasiX.value = 0;
-    sliderTranslasiY.value = 0;
-    sliderRotasi.value = 0;
+    if(localStorage.getItem("state") == "line") {
+        sliderTranslasiX.value = 0;
+        sliderTranslasiY.value = 0;
+        sliderRotasi.value = 0;
+    } 
 });
 
 const drawLine = (positions, positionBuffer, colors, colorBuffer) => {
