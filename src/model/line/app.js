@@ -141,7 +141,7 @@ sliderTranslasiX.addEventListener("input", e => {
 
 sliderTranslasiY.addEventListener("input", e => {
     if(localStorage.getItem("state") == "line") {
-        const shiftVal = sliderTranslasiY.value - positions[1];
+        const shiftVal = sliderTranslasiY.value - positions[pickedObject + 1];
         positions[pickedObject + 1] += shiftVal;
         if(pickedObject != null) {
             if((pickedObject) % 4 == 0) {
