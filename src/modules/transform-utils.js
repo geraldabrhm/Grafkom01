@@ -27,3 +27,18 @@ export const hexToRGB = hex => {
       b: parseInt(rgbForm[3], 16)
     } : null;
 }
+
+export const rotateSquare = (x0, y0, x1, y1, x2, y2, x3, y3, deg) => {
+    const degInRadiant = deg*Math.PI/180
+    const xc = (x0 + x1 + x2 + x3) / 4
+    const yc = (y0 + y1 + y2 + y3) / 4
+    const x0r = (x0 - xc)*Math.cos(degInRadiant) - (y0 - yc)*Math.sin(degInRadiant) + xc
+    const y0r = (x0 - xc)*Math.sin(degInRadiant) + (y0 - yc)*Math.cos(degInRadiant) + yc
+    const x1r = (x1 - xc)*Math.cos(degInRadiant) - (y1 - yc)*Math.sin(degInRadiant) + xc
+    const y1r = (x1 - xc)*Math.sin(degInRadiant) + (y1 - yc)*Math.cos(degInRadiant) + yc
+    const x2r = (x2 - xc)*Math.cos(degInRadiant) - (y2 - yc)*Math.sin(degInRadiant) + xc
+    const y2r = (x2 - xc)*Math.sin(degInRadiant) + (y2 - yc)*Math.cos(degInRadiant) + yc
+    const x3r = (x3 - xc)*Math.cos(degInRadiant) - (y3 - yc)*Math.sin(degInRadiant) + xc
+    const y3r = (x3 - xc)*Math.sin(degInRadiant) + (y3 - yc)*Math.cos(degInRadiant) + yc
+    return [x0r, y0r, x1r, y1r, x2r, y2r, x3r, y3r]
+}
