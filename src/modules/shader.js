@@ -24,8 +24,8 @@ const vertexShaderGLSL2 = `
         
     void main() {    
         float s = sin(angle);
-  float c = cos(angle);
-  mat4 rotation = mat4(c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        float c = cos(angle);
+        mat4 rotation = mat4(c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         gl_Position = vec4(rotation * a_position);
         v_color = a_color;
     }

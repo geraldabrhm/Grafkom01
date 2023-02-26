@@ -29,6 +29,8 @@ modelOption.addEventListener("change", (e) => {
   switch (modelOption.value) {
     // TODO Handler dynamic html element in particular model
     case "model/line/app.js":
+	  runButton.style.visibility = "visible";
+	  stopButton.style.visibility = "visible";
       break;
     case "model/polygon/app.js":
       polygonSide.style.visibility = "visible";

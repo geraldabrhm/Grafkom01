@@ -104,17 +104,30 @@ const sliderRotasi = document.querySelector("#rotasi-slider");
 const colorPicker = document.querySelector("#color-picker");
 const lineLoader = document.querySelector("#loader");
 
-lineLoader.addEventListener("click", e => {
-    
-        positions.push(
-            -0.25, 0,
-            0.25, 0,
-        )
-        colors.push(
-            0, 0, 0, 1,
-            0, 0, 0, 1,
-        )
-        drawLine(positions, positionBuffer, colors, colorBuffer);
+// runButton.addEventListener("click", e => {
+//     animateLine = true
+//     console.info("hey")
+//     // while(animateLine) {
+//     //     setTimeout(() => {
+//     //         console.info("Hey from run")
+//     //     }, 5000)
+//     // }
+// })
+
+// stopButton.addEventListener("click", e => {
+//     animateLine = false
+// })
+
+lineLoader.addEventListener("click", e => {    
+    positions.push(
+        -0.25, 0,
+        0.25, 0,
+    )
+    colors.push(
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+    )
+    drawLine(positions, positionBuffer, colors, colorBuffer);
 })
 
 sliderTranslasiX.addEventListener("input", e => {
@@ -254,6 +267,38 @@ const picker = (e) => {
         }
     }
 }
+
+// Set up the uniform variable
+const angleUniformLocation = gl.getUniformLocation(program, 'angle');
+let angle = 0;
+let stopRotation = false;
+
+// Render loop
+function render() {
+    if (!stopRotation) {
+        // Clear the canvas
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // Update the angle
+        angle += 0.01;
+        gl.uniform1f(angleUniformLocation, angle);
+
+        // Draw the square
+        drawLine(positions, positionBuffer, colors, colorBuffer);
+    }
+
+    // Request the next frame
+    requestAnimationFrame(render);
+}
+const runButton = document.querySelector('#runButton');
+runButton.addEventListener('click', () => {
+    stopRotation = false;
+    requestAnimationFrame(render);
+});
+const stopButton = document.querySelector('#stopButton');
+stopButton.addEventListener('click', () => {
+    stopRotation = true;
+});
 
 // 0 1 || 2 3 || 4 5 || 6 7 ||
 // 0 1 2 3 || 4 5 6 7 || 8 9 10 11 ||

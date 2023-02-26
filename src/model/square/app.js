@@ -133,6 +133,11 @@ const sliderTranslasiX = document.querySelector("#translasi-x-slider");
 const sliderTranslasiY = document.querySelector("#translasi-y-slider");
 const sliderRotasi = document.querySelector("#rotasi-slider");
 
+sliderTranslasiX.removeAttribute("disabled");
+sliderTranslasiY.removeAttribute("disabled");
+sliderRotasi.removeAttribute("disabled");
+colorPicker.removeAttribute("disabled");
+
 sliderTranslasiX.addEventListener("input", e => {
     const shiftVal = sliderTranslasiX.value - vertices[0];
     vertices.forEach((val, idx) => {
