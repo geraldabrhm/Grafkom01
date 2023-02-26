@@ -194,3 +194,70 @@ rectangleLoader.addEventListener("click", (e) => {
     // Draw the square
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 });
+
+// handle color picker event
+const colorPicker = document.querySelector("#color-picker");
+
+colorPicker.addEventListener("input", (e) => {
+    const rgbVal = hexToRGB(colorPicker.value);
+    // Create a fragment shader
+    let x = rgbVal.r / 255;
+    let y = rgbVal.g / 255;
+    let z = rgbVal.b / 255;
+    let a = 1;
+    const fragmentShaderSource = `
+    precision mediump float;
+    void main() {
+        gl_FragColor = vec4(x, y, z, a);
+    }
+    `;
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+    // Create a program and attach the shaders
+    const program = createProgram(gl, vertexShader, fragmentShader);
+    gl.useProgram(program);
+
+    // Bind the vertex buffer to the program
+    const positionAttributeLocation = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(positionAttributeLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+});
+
+// handle save to json file
+const saveBtn = document.querySelector("#save-btn");
+saveBtn.addEventListener("click", (e) => {
+  const data = vertices;
+  const dataStr = JSON.stringify(data);
+  const dataUri =
+    "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+  const exportFileDefaultName = "data.json";
+
+  let linkElement = document.createElement("a");
+  linkElement.setAttribute("href", dataUri);
+  linkElement.setAttribute("download", exportFileDefaultName);
+  linkElement.click();
+});
+
+// handle load from json file
+const loadBtn = document.querySelector("#load-btn");
+loadBtn.addEventListener("click", (e) => {
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = ".json";
+  fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target.result;
+      const data = JSON.parse(result);
+      polygons.push(...data);
+
+      drawAllPolygons();
+    };
+    reader.readAsText(file);
+  };
+  fileInput.click();
+});
