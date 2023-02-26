@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="modules/webgl-utils.js" defer></script>
     <script type="text/javascript" src="script.js" defer></script>
-    <script type="module" src="model/line/app.js" defer></script>
+    <script id="model-script" type="module" defer></script>
 </head>
 <body>
     <h1 id="main-header">2D Web-based CAD</h1>
@@ -16,14 +16,29 @@
       <canvas id="draw-surface" width="700px" height="700px" ></canvas>
       <div id="canvas-modifier">
           <select name="model-option" id="model-option">
-            <option value="line">Line</option>
-            <option value="square">Square</option>
-            <option value="rectangle">Rectangle</option>
-            <option value="polygon">Polygon</option>
+            <option value="model/line/app.js" selected="selected">Line</option>
+            <option value="model/square/app.js">Square</option>
+            <option value="model/rectangle/app.js">Rectangle</option>
+            <option value="model/polygon/app.js">Polygon</option>
           </select>
           <ul>
             <li>
-              <button id="line-loader">Load New Line</button>
+              <button id="loader">Load</button>
+              <button id="runButton">runButton</button>
+              <button id="stopButton">stopButton</button>
+              <div id="polygon-select-side">
+                <select id="select-side" style="margin-right: 1cm">
+                  <option value="3" selected="selected">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="16">16</option>
+                  <option value="32">32</option>
+                  <option value="64">64</option>
+                </select>
+              </div>
               <div class="slider-container">
                 <p>Translasi X</p>
                 <input id="translasi-x-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01" disabled>

@@ -2,7 +2,7 @@ import { vertexShaderGLSL, fragmentShaderGLSL } from "../../modules/shader.js";
 import { createShader, createProgram } from "../../modules/generator.js";
 import { getRelativePosition, rotateSquare } from "../../modules/transform-utils.js";
 
-const canvas = document.querySelector('#canvas');
+const canvas = document.querySelector('#draw-surface');
 const gl = canvas.getContext('webgl');
 
 // Define the vertices of the square

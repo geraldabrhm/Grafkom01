@@ -1,18 +1,43 @@
 const modelOption = document.querySelector("#model-option")
 
-window.addEventListener("load", e => {
-    localStorage.setItem("state", modelOption.value) // Default value
-})
+// Dynamic element
+const runButton = document.querySelector("#runButton")
+const stopButton = document.querySelector("#stopButton")
+const polygonSide = document.querySelector("#polygon-select-side")
+
 
 modelOption.addEventListener("change", e => {
-    localStorage.setItem("state", modelOption.value)
-    const state = localStorage.getItem("state")
+    // * Set up dynamic script
+    const scriptElement = document.createElement('script');
+    scriptElement.id = "model-script"
+    scriptElement.type = "module"
+    scriptElement.src = modelOption.value
 
-    // Handling item in canvas modifier that exclusive to line model
-    const lineLoader = document.querySelector("#line-loader")
-    if(state != "line") {
-        lineLoader.style.display = "none"
-    } else {
-        lineLoader.style.display = "block"
+    const oldScriptElement = document.querySelector('#model-script');
+    if (oldScriptElement) {
+        oldScriptElement.remove();
+    }
+
+    document.head.appendChild(scriptElement);
+
+    // * Handling dynamic element (hide and show): List all dynamic element here
+    runButton.style.visibility = "hidden"
+    stopButton.style.visibility = "hidden"
+    polygonSide.style.visibility = "hidden"
+    switch(modelOption.value) {
+        // TODO Handler dynamic html element in particular model
+        case "model/line/app.js":
+            break;
+        case "model/polygon/app.js":
+            polygonSide.style.visibility = "visible"
+            break;
+        case "model/rectangle/app.js":
+            runButton.style.visibility = "visible"
+            stopButton.style.visibility = "visible"
+            break
+        case "model/square/app.js":
+            runButton.style.visibility = "visible"
+            stopButton.style.visibility = "visible"
+            break;
     }
 })
