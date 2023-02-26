@@ -8,6 +8,7 @@ import { createShader, createProgram } from "../../modules/generator.js";
 import {
   getRelativePosition,
   rotatePoints,
+  rotateSquare,
   hexToRGB,
 } from "../../modules/transform-utils.js";
 
@@ -101,9 +102,6 @@ const drawAllPolygons = () => {
 };
 
 const drawPolygon = (polygon) => {
-  console.log("drawing polygon");
-  console.log("polygons :", polygons);
-
   const { vertices, colors } = polygon;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -117,13 +115,11 @@ const drawPolygon = (polygon) => {
 
   gl.enableVertexAttribArray(colorAttributeLocation);
   gl.vertexAttribPointer(colorAttributeLocation, 4, gl.FLOAT, false, 0, 0);
-
-  console.log("printing vertices", vertices);
   gl.drawArrays(gl.TRIANGLE_FAN, 0, vertices.length / 2);
 };
 
 // handle create polygon
-const polygonLoader = document.querySelector("#polygon-loader");
+const polygonLoader = document.querySelector("#loader");
 polygonLoader.addEventListener("click", (e) => {
   let numSides = 3;
   let angle = (2 * Math.PI) / numSides;
@@ -156,17 +152,19 @@ polygonLoader.addEventListener("click", (e) => {
 sliderTranslasiX.addEventListener("input", (e) => {
   let selectedPolygon = polygons[selectedIndex];
   const shiftVal = sliderTranslasiX.value - selectedPolygon.vertices[0];
+
   selectedPolygon.vertices.forEach((val, idx) => {
     if (idx % 2 === 0) {
       selectedPolygon.vertices[idx] += shiftVal;
     }
   });
+
   drawAllPolygons();
 });
 
 sliderTranslasiY.addEventListener("input", (e) => {
   let selectedPolygon = polygons[selectedIndex];
-  const shiftVal = sliderTranslasiY.value - selectedPolygon.vertices[0];
+  const shiftVal = sliderTranslasiY.value - selectedPolygon.vertices[1];
   selectedPolygon.vertices.forEach((val, idx) => {
     if (idx % 2 === 1) {
       selectedPolygon.vertices[idx] += shiftVal;
@@ -185,23 +183,51 @@ const picker = (e, vertices) => {
   const x = e.clientX;
   const y = e.clientY;
   const valNormalize = getRelativePosition(x, y, rect);
-  const proportionToCanvasSize = 30 / rect.width;
-  console.log("proportion", proportionToCanvasSize);
-  console.log("vertddddx", vertices);
+  const proportionToCanvasSize = 15 / rect.width;
+  console.log("valNormalize : ", valNormalize);
 
   for (let i = 0; i < vertices.length; i++) {
     if (
       Math.abs(vertices[i] - valNormalize[0]) < proportionToCanvasSize &&
       Math.abs(vertices[i + 1] - valNormalize[1]) < proportionToCanvasSize
     ) {
+      console.log("selected vertex : ", i / 2);
       return i;
     }
   }
-
   return -1;
 };
 
+// add another listener for selecting vertex
+// canvas.addEventListener("mousedown", (e) => {
+//   // Get the mouse position relative to top left of web view
+//   let x = e.clientX;
+//   let y = e.clientY;
+
+//   const valNormalize = getRelativePosition(x, y, rect);
+
+//   const proportionToCanvasSize = 50 / rect.width;
+//   // iterarte through polygons
+//   for (let i = 0; i < polygons.length; i++) {
+//     const polygon = polygons[i];
+//     const vertices = polygon.vertices;
+//     for (let j = 0; j < vertices.length; j += 2) {
+//       if (
+//         Math.abs(vertices[j] - valNormalize[0]) < proportionToCanvasSize &&
+//         Math.abs(vertices[j + 1] - valNormalize[1]) < proportionToCanvasSize
+//       ) {
+//         selectedIndex = i;
+//         selectedVertices = j;
+//         dragging = true;
+//         break;
+//       }
+//     }
+//   }
+// });
+
 canvas.addEventListener("mousedown", (e) => {
+  const pickedInfo = document.querySelector("#picked-info");
+
   // Get the mouse position relative to top left of web view
   let x = e.clientX;
   let y = e.clientY;
@@ -228,12 +254,24 @@ canvas.addEventListener("mousedown", (e) => {
 
         selectedVertices = picker(e, polygons[i].vertices);
         if (selectedVertices !== -1) {
+          sliderTranslasiX.value = vertices[selectedVertices];
+          sliderTranslasiY.value = vertices[selectedVertices + 1];
           dragging = true;
+        } else {
+          sliderTranslasiX.value = vertices[0];
+          sliderTranslasiY.value = vertices[1];
+          dragging = false;
         }
       }
     }
     if (inside) {
       selectedIndex = i;
+      sliderTranslasiX.removeAttribute("disabled");
+      sliderTranslasiY.removeAttribute("disabled");
+      sliderRotasi.removeAttribute("disabled");
+      colorPicker.removeAttribute("disabled");
+      pickedInfo.removeAttribute("hidden");
+      pickedInfo.innerHTML = `<b>Selected:</b> vertex with index ${selectedVertices} of polygon with index ${selectedIndex}`;
       console.log(
         "polygon: ",
         polygon,
@@ -244,6 +282,12 @@ canvas.addEventListener("mousedown", (e) => {
         "is clicked"
       );
       break;
+    } else {
+      pickedInfo.setAttribute("hidden", true);
+      sliderTranslasiX.setAttribute("disabled", true);
+      sliderTranslasiY.setAttribute("disabled", true);
+      sliderRotasi.setAttribute("disabled", true);
+      colorPicker.setAttribute("disabled", true);
     }
   }
 });
@@ -327,14 +371,12 @@ colorPicker.addEventListener("input", (e) => {
       colors[i + 2] = rgbVal.b / 255;
       colors[i + 3] = 1;
     }
-    selectedVertices = -1; // reset selectedVertices
   } else {
     let colorindex = (selectedVertices / 2) * 4;
     colors[colorindex] = rgbVal.r / 255;
     colors[colorindex + 1] = rgbVal.g / 255;
     colors[colorindex + 2] = rgbVal.b / 255;
     colors[colorindex + 3] = 1;
-    selectedVertices = -1; // reset selectedVertices
   }
   drawAllPolygons();
 });
