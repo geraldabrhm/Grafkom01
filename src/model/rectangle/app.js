@@ -19,7 +19,17 @@ gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
 // Create a vertex shader
-const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderGLSL);
+const vertexShaderSource = `
+attribute vec2 a_position;
+uniform float angle;
+void main() {
+  float s = sin(angle);
+  float c = cos(angle);
+  mat3 rotation = mat3(c, s, 0, -s, c, 0, 0, 0, 1);
+  gl_Position = vec4(rotation * vec3(a_position, 1), 1);
+}
+`;
+const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 
 // Create a fragment shader
 const fragmentShaderSource = `
@@ -42,6 +52,38 @@ gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
 // Draw the square
 gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+// Set up the uniform variable
+const angleUniformLocation = gl.getUniformLocation(program, 'angle');
+let angle = 0;
+let stopRotation = false;
+
+// Render loop
+function render() {
+    if (!stopRotation) {
+        // Clear the canvas
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // Update the angle
+        angle += 0.01;
+        gl.uniform1f(angleUniformLocation, angle);
+
+        // Draw the square
+        gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+    }
+
+    // Request the next frame
+    requestAnimationFrame(render);
+}
+const runButton = document.getElementById('runButton');
+runButton.addEventListener('click', () => {
+    stopRotation = false;
+    requestAnimationFrame(render);
+});
+const stopButton = document.getElementById('stopButton');
+stopButton.addEventListener('click', () => {
+    stopRotation = true;
+});
 
 // * Handle mouse event
 let selectedIndex = null;
