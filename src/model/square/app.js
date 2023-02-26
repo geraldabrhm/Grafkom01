@@ -50,9 +50,6 @@ gl.enableVertexAttribArray(positionAttributeLocation);
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
-// Draw the square
-gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-
 // Set up the uniform variable
 const angleUniformLocation = gl.getUniformLocation(program, 'angle');
 let angle = 0;
@@ -190,3 +187,10 @@ const drawLine = (vertices, vertexBuffer) => {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 }
+
+// handle create square
+const squareLoader = document.querySelector("#loader");
+squareLoader.addEventListener("click", (e) => {
+    // Draw the square
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+});
