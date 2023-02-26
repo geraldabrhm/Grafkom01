@@ -53,15 +53,44 @@ const sliderTranslasiX = document.querySelector("#translasi-x-slider");
 const sliderTranslasiY = document.querySelector("#translasi-y-slider");
 
 selectSide.addEventListener("change", (e) => {
-  const numSides = parseInt(e.target.value);
-  const angle = (2 * Math.PI) / numSides;
-  positions.length = 0;
-  for (var i = 0; i < numSides; i++) {
-    positions.push(0.5 * Math.cos(i * angle));
-    positions.push(0.5 * Math.sin(i * angle));
+  const numVertices = parseInt(e.target.value);
+  if (!isNaN(numVertices) && selectedIndex !== -1) {
+    // Update the vertices array for the selected polygon
+    const polygon = polygons[selectedIndex];
+    const oldNumVertices = polygon.vertices.length / 2;
+    const newNumVertices = numVertices < 3 ? 3 : numVertices;
+
+    if (oldNumVertices !== newNumVertices) {
+      const vertices = polygon.vertices;
+      const centerX = (vertices[0] + vertices[2] + vertices[4]) / 3;
+      const centerY = (vertices[1] + vertices[3] + vertices[5]) / 3;
+      const radius = Math.sqrt(
+        Math.pow(vertices[0] - centerX, 2) + Math.pow(vertices[1] - centerY, 2)
+      );
+      const newVertices = [];
+      for (let i = 0; i < newNumVertices; i++) {
+        const angle = (2 * Math.PI * i) / newNumVertices;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+        newVertices.push(x, y);
+      }
+      polygon.vertices = newVertices;
+    }
+
+    // add the color matrix
+    const colors = polygon.colors;
+    const oldNumColors = colors.length / 4;
+    const newNumColors = newNumVertices;
+    if (oldNumColors !== newNumColors) {
+      const newColors = [];
+      for (let i = 0; i < newNumColors; i++) {
+        newColors.push(1, 0, 0, 1);
+      }
+      polygon.colors = newColors;
+    }
   }
 
-  drawPolygon(positions, positionBuffer, colors, colorBuffer);
+  drawAllPolygons();
 });
 
 const drawAllPolygons = () => {
@@ -156,14 +185,11 @@ const picker = (e, vertices) => {
   const x = e.clientX;
   const y = e.clientY;
   const valNormalize = getRelativePosition(x, y, rect);
-  const proportionToCanvasSize = 15 / rect.width;
+  const proportionToCanvasSize = 30 / rect.width;
   console.log("proportion", proportionToCanvasSize);
   console.log("vertddddx", vertices);
 
   for (let i = 0; i < vertices.length; i++) {
-    console.log(" A ", vertices[i] - valNormalize[0]);
-    console.log(" V ", vertices[i + 1] - valNormalize[1]);
-
     if (
       Math.abs(vertices[i] - valNormalize[0]) < proportionToCanvasSize &&
       Math.abs(vertices[i + 1] - valNormalize[1]) < proportionToCanvasSize
@@ -316,11 +342,7 @@ colorPicker.addEventListener("input", (e) => {
 // handle save to json file
 const saveBtn = document.querySelector("#save-btn");
 saveBtn.addEventListener("click", (e) => {
-  const data = {
-    positions,
-    numSides,
-    type,
-  };
+  const data = polygons;
   const dataStr = JSON.stringify(data);
   const dataUri =
     "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
@@ -345,11 +367,9 @@ loadBtn.addEventListener("click", (e) => {
     reader.onload = (e) => {
       const result = e.target.result;
       const data = JSON.parse(result);
-      positions = data.positions;
-      numSides = data.numSides;
-      selectSide.value = numSides;
+      polygons.push(...data);
 
-      drawPolygon(positions, positionBuffer, colors, colorBuffer);
+      drawAllPolygons();
     };
     reader.readAsText(file);
   };
