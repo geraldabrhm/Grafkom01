@@ -1,69 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2D CAD</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script type="text/javascript" src="modules/webgl-utils.js" defer></script>
     <script type="text/javascript" src="script.js" defer></script>
     <script id="model-script" type="module" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <h1 id="main-header">2D Web-based CAD</h1>
     <main>
-      <canvas id="draw-surface" width="700px" height="700px" ></canvas>
+      <canvas id="draw-surface" width="700px" height="700px"></canvas>
       <div id="canvas-modifier">
-          <select name="model-option" id="model-option">
-            <option value="model/line/app.js" selected="selected">Line</option>
-            <option value="model/square/app.js">Square</option>
-            <option value="model/rectangle/app.js">Rectangle</option>
-            <option value="model/polygon/app.js">Polygon</option>
-          </select>
-          <ul>
-            <li>
-              <button id="loader">Load</button>
-              <button id="runButton">runButton</button>
-              <button id="stopButton">stopButton</button>
-              <div id="polygon-select-side">
-                <select id="select-side" style="margin-right: 1cm">
-                  <option value="3" selected="selected">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="16">16</option>
-                  <option value="32">32</option>
-                  <option value="64">64</option>
-                </select>
-              </div>
-              <div class="slider-container">
-                <p>Translasi X</p>
-                <input id="translasi-x-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01" disabled>
-              </div>
-              <div class="slider-container">
-                <p>Translasi Y</p>
-                <input id="translasi-y-slider" class="slider" type="range" min="-1" max="1" value="0" step="0.01" disabled>
-              </div>
-              <div class="slider-container">
-                <p>Rotasi</p>
-                <input id="rotasi-slider" class="slider" type="range" min="0" max="360" value="0" step="0.01" disabled>
-              </div>
-              <div class="slider-container">
-                <p>Color</p>
-                <input id="color-picker" class="" type="color" value="#ff0000" disabled>
-              </div>
-              <button id="save-btn">Save</button>
-              <div>
-                <p>Load file</p>
-                <input type="file" id="load-btn" />
-              </div>
-              <p id="picked-info" hidden>Selected: </p>
-            </li>
-          </ul>
+        <select name="model-option" id="model-option">
+          <option value="model/line/app.js" selected="selected">Line</option>
+          <option value="model/square/app.js">Square</option>
+          <option value="model/rectangle/app.js">Rectangle</option>
+          <option value="model/polygon/app.js">Polygon</option>
+        </select>
+        <ul>
+          <li>
+            <button id="loader">Load</button>
+            <button id="runButton">runButton</button>
+            <button id="stopButton">stopButton</button>
+            <div id="polygon-select-side">
+              <select id="select-side" style="margin-right: 1cm">
+                <option value="3" selected="selected">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="16">16</option>
+                <option value="32">32</option>
+                <option value="64">64</option>
+              </select>
+            </div>
+            <button id="remove-vertex" disabled>Remove Vertex</button>
+            <div class="slider-container">
+              <p>Translasi X</p>
+              <input
+                id="translasi-x-slider"
+                class="slider"
+                type="range"
+                min="-1"
+                max="1"
+                value="0"
+                step="0.01"
+                disabled
+              />
+            </div>
+            <div class="slider-container">
+              <p>Translasi Y</p>
+              <input
+                id="translasi-y-slider"
+                class="slider"
+                type="range"
+                min="-1"
+                max="1"
+                value="0"
+                step="0.01"
+                disabled
+              />
+            </div>
+            <div class="slider-container">
+              <p>Rotasi</p>
+              <input
+                id="rotasi-slider"
+                class="slider"
+                type="range"
+                min="0"
+                max="360"
+                value="0"
+                step="0.01"
+                disabled
+              />
+            </div>
+            <div class="slider-container">
+              <p>Color</p>
+              <input
+                id="color-picker"
+                class=""
+                type="color"
+                value="#ff0000"
+                disabled
+              />
+            </div>
+            <button id="save-btn">Save</button>
+            <div>
+              <p>Load file</p>
+              <input type="file" id="load-btn" />
+            </div>
+            <p id="picked-info" hidden>Selected:</p>
+          </li>
+        </ul>
       </div>
     </main>
-</body>
+  </body>
 </html>

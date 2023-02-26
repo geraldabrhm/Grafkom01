@@ -31,16 +31,7 @@ const colorAttributeLocation = gl.getAttribLocation(program, "a_color");
 let polygons = []; // array of polygon object
 
 const positionBuffer = gl.createBuffer();
-// gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-// gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
-// gl.enableVertexAttribArray(positionAttributeLocation);
-
 const colorBuffer = gl.createBuffer();
-// gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-// gl.vertexAttribPointer(colorAttributeLocation, 4, gl.FLOAT, false, 0, 0);
-// gl.enableVertexAttribArray(colorAttributeLocation);
 
 // * Drawing the initial line
 gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -149,6 +140,22 @@ polygonLoader.addEventListener("click", (e) => {
   drawAllPolygons();
 });
 
+// remove selected vertex
+
+const removeVertex = document.querySelector("#remove-vertex");
+removeVertex.addEventListener("click", (e) => {
+  if (selectedIndex !== -1) {
+    const polygon = polygons[selectedIndex];
+    const numVertices = polygon.vertices.length / 2;
+    if (numVertices > 3) {
+      polygon.vertices.splice(selectedVertices * 2, 2);
+      polygon.colors.splice(selectedVertices * 4, 4);
+    }
+  }
+
+  drawAllPolygons();
+});
+
 sliderTranslasiX.addEventListener("input", (e) => {
   let selectedPolygon = polygons[selectedIndex];
   const shiftVal = sliderTranslasiX.value - selectedPolygon.vertices[0];
@@ -198,33 +205,6 @@ const picker = (e, vertices) => {
   return -1;
 };
 
-// add another listener for selecting vertex
-// canvas.addEventListener("mousedown", (e) => {
-//   // Get the mouse position relative to top left of web view
-//   let x = e.clientX;
-//   let y = e.clientY;
-
-//   const valNormalize = getRelativePosition(x, y, rect);
-
-//   const proportionToCanvasSize = 50 / rect.width;
-//   // iterarte through polygons
-//   for (let i = 0; i < polygons.length; i++) {
-//     const polygon = polygons[i];
-//     const vertices = polygon.vertices;
-//     for (let j = 0; j < vertices.length; j += 2) {
-//       if (
-//         Math.abs(vertices[j] - valNormalize[0]) < proportionToCanvasSize &&
-//         Math.abs(vertices[j + 1] - valNormalize[1]) < proportionToCanvasSize
-//       ) {
-//         selectedIndex = i;
-//         selectedVertices = j;
-//         dragging = true;
-//         break;
-//       }
-//     }
-//   }
-// });
-
 canvas.addEventListener("mousedown", (e) => {
   const pickedInfo = document.querySelector("#picked-info");
 
@@ -254,6 +234,8 @@ canvas.addEventListener("mousedown", (e) => {
 
         selectedVertices = picker(e, polygons[i].vertices);
         if (selectedVertices !== -1) {
+          removeVertex.removeAttribute("disabled");
+
           sliderTranslasiX.value = vertices[selectedVertices];
           sliderTranslasiY.value = vertices[selectedVertices + 1];
           dragging = true;
