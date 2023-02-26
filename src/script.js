@@ -8,6 +8,7 @@ const removeVertex = document.querySelector("#remove-vertex");
 
 modelOption.addEventListener("change", (e) => {
   // * Set up dynamic script
+
   const scriptElement = document.createElement("script");
   scriptElement.id = "model-script";
   scriptElement.type = "module";
@@ -32,6 +33,8 @@ modelOption.addEventListener("change", (e) => {
     case "model/polygon/app.js":
       polygonSide.style.visibility = "visible";
       removeVertex.style.visibility = "visible";
+      runButton.style.visibility = "visible";
+      stopButton.style.visibility = "visible";
       break;
     case "model/rectangle/app.js":
       runButton.style.visibility = "visible";

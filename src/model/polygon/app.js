@@ -33,11 +33,41 @@ let polygons = []; // array of polygon object
 const positionBuffer = gl.createBuffer();
 const colorBuffer = gl.createBuffer();
 
+const angleUniformLocation = gl.getUniformLocation(program, "angle");
+let angle = 0;
+let stopRotation = false;
+
 // * Drawing the initial line
 gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 gl.useProgram(program); // Execute shader program
+
+function render() {
+  if (!stopRotation) {
+    // Clear the canvas
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Update the angle
+    angle += 0.01;
+    gl.uniform1f(angleUniformLocation, angle);
+
+    // Draw the square
+    drawAllPolygons();
+  }
+
+  // Request the next frame
+  requestAnimationFrame(render);
+}
+const runButton = document.getElementById("runButton");
+runButton.addEventListener("click", () => {
+  stopRotation = false;
+  requestAnimationFrame(render);
+});
+const stopButton = document.getElementById("stopButton");
+stopButton.addEventListener("click", () => {
+  stopRotation = true;
+});
 
 // handle select side event
 const selectSide = document.querySelector("#select-side");
